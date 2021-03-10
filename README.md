@@ -31,6 +31,7 @@ I needed to create a pulse trigger singal, when the mailbox gets opened and if i
 To get this result I used the following FINAL schematic:
 
 ![Alt text](pictures/Sensor_Resetswitch-Puls_Schematic.png?raw=true "Final schematic")
+![Alt text](pictures/Mailbox_sensor_layout.png?raw=true "Final PCB Layout")
 
 The signal at the resetpin, when the reedswitch opens looks like that. By varying the value of the capacitor you can also change the pulse length:
 ![Alt text](pictures/Resetpuls_Transistor.bmp?raw=true "Reset signal")
