@@ -5,7 +5,8 @@ A MQTT Door- or Mailboxsensor using an ESP8266 Wifi Module, which notifies you i
 ![Alt text](pictures/mailbox.jpg?raw=true "https://www.swinginter.net/wp-content/uploads/2018/03/otelo-mailbox.png")
 
 # How it Works
-If the mailbox opens the ESP wakes up from deep-sleep, connects to Wifi and the MQTT-server and sents out a MQTT message, which is then processed by Node-Red. Node-Red however "converts" it into a Telegram message, which is then posted to my phone via a Telegram-bot.
+If the mailbox opens the ESP wakes up from deep-sleep, connects to Wifi and the MQTT-server and sents out a MQTT message, which is then processed by Node-Red. Node-Red however "converts" it into a Matrix message, which is then posted to my phone via a Matrix-Chatbot.
+## You Can find the Instructions how to create the Chatbot in the [node-red-Folder](node-red/README.md).
 
 As a switch I used a magentic REED-switch, which CLOSES if a magnet gets close to it. This was the first problem because when the mailbox is closed (which is the case for the most time) the reedswitch is also closed. If we now want to get notified when the mailbox opens we need to use the opening reedswitch as a trigger to send the message.
 
@@ -34,7 +35,7 @@ To get this result I used the following FINAL schematic:
 ![Alt text](pictures/Mailbox_sensor_layout.png?raw=true "Final PCB Layout")
 
 The signal at the resetpin, when the reedswitch opens looks like that. By varying the value of the capacitor you can also change the pulse length:
-![Alt text](pictures/Resetpuls_Transistor.bmp?raw=true "Reset signal")
+![Alt text](pictures/Resetpuls_Transistor.jpg?raw=true "Reset signal")
 
 # The code
 The code is verry simple: After a reset it connects to wifi and an MQTT server where it publishes a message. After that it causes the ESP to enter an infinite deep sleep, which can only be interrupted by another reset of the ESP board. I used an ESP8266 Wifi Module but the code should work with any other ESP too. 

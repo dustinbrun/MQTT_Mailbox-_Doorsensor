@@ -1,0 +1,122 @@
+[
+    {
+        "id": "d727f9f0.40df78",
+        "type": "inject",
+        "z": "825dd022.49967",
+        "name": "",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 570,
+        "y": 560,
+        "wires": [
+            [
+                "458a6413.7502a4"
+            ]
+        ]
+    },
+    {
+        "id": "b6977877.47316",
+        "type": "function",
+        "z": "825dd022.49967",
+        "name": "Post ist da",
+        "func": "var nachricht = {};\n\nnachricht.payload = \"Die Post ist da!\";\n\nreturn nachricht;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 560,
+        "wires": [
+            [
+                "fc3dbdfa.5e41e"
+            ]
+        ]
+    },
+    {
+        "id": "b071a851.246c58",
+        "type": "mqtt in",
+        "z": "825dd022.49967",
+        "name": "",
+        "topic": "briefkasten/sensor",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "3bfdb428.8d8e3c",
+        "x": 550,
+        "y": 500,
+        "wires": [
+            [
+                "458a6413.7502a4"
+            ]
+        ]
+    },
+    {
+        "id": "458a6413.7502a4",
+        "type": "delay",
+        "z": "825dd022.49967",
+        "name": "Limit 1 per minute",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 770,
+        "y": 560,
+        "wires": [
+            [
+                "b6977877.47316"
+            ]
+        ]
+    },
+    {
+        "id": "fc3dbdfa.5e41e",
+        "type": "matrix-sendtext",
+        "z": "825dd022.49967",
+        "name": "bot_room out",
+        "room": "!Qbooooooooooooo:Chat",
+        "server": "ad05a9d3.0f4cd",
+        "notice": false,
+        "x": 1180,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "3bfdb428.8d8e3c",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "MQTT_Server",
+        "broker": "192.168.123.123",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "ad05a9d3.0f4cd",
+        "type": "matrix-server",
+        "z": "",
+        "name": "bot_Chat",
+        "server": "http://192.168.123.124:8008",
+        "token": "ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
+        "userid": "@bot:Chat",
+        "room": ""
+    }
+]

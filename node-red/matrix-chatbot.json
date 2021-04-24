@@ -1,0 +1,228 @@
+[
+    {
+        "id": "d727f9f0.40df78",
+        "type": "inject",
+        "z": "825dd022.49967",
+        "name": "",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 570,
+        "y": 560,
+        "wires": [
+            [
+                "458a6413.7502a4"
+            ]
+        ]
+    },
+    {
+        "id": "b6977877.47316",
+        "type": "function",
+        "z": "825dd022.49967",
+        "name": "Post ist da",
+        "func": "var nachricht = {};\n\nnachricht.payload = \"Die Post ist da!\";\n\nreturn nachricht;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 560,
+        "wires": [
+            [
+                "fc3dbdfa.5e41e"
+            ]
+        ]
+    },
+    {
+        "id": "d7f372ab.b85138",
+        "type": "function",
+        "z": "825dd022.49967",
+        "name": "Guten Morgen Temperatur",
+        "func": "var temp_boden = global.get(\"Temperatur_Boden\");\nvar temp_2m = global.get(\"Temperatur_2m\");\n\nvar nachricht = {};\n\nnachricht.payload = \"Guten Morgen, draußen sind aktuell\\n\"+ temp_2m + \" °C (2m)\\n\" + temp_boden + \" °C (Boden)!\";\n\nreturn nachricht;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 800,
+        "y": 620,
+        "wires": [
+            [
+                "fc3dbdfa.5e41e"
+            ]
+        ]
+    },
+    {
+        "id": "657df136.f66d88",
+        "type": "inject",
+        "z": "825dd022.49967",
+        "name": "Jeden Morgen um 8",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "00 08 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 540,
+        "y": 620,
+        "wires": [
+            [
+                "d7f372ab.b85138"
+            ]
+        ]
+    },
+    {
+        "id": "b071a851.246c58",
+        "type": "mqtt in",
+        "z": "825dd022.49967",
+        "name": "",
+        "topic": "briefkasten/sensor",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "3bfdb428.8d8e3c",
+        "x": 550,
+        "y": 500,
+        "wires": [
+            [
+                "458a6413.7502a4"
+            ]
+        ]
+    },
+    {
+        "id": "b7a014ce.f0ef9",
+        "type": "function",
+        "z": "825dd022.49967",
+        "name": "Eingabe verarbeiten",
+        "func": "if(msg.payload.startsWith(\"B\"))\n{\n    var anweisung = msg.payload;\n    anweisung = anweisung.replace(\" \",\"\");\n\n    var nachricht = {};\n\n    if (anweisung == 'Bt'){\n        var temp_boden = global.get(\"Temperatur_Boden\");\n        var temp_2m = global.get(\"Temperatur_2m\");\n        \n        nachricht.payload = \"Aktuelle Temperatur:\\n\"+ \n        temp_2m + \" °C (2m)\\n\" + \n        temp_boden + \" °C (Boden)!\";\n    }\n    \n    else if (anweisung == 'Bs'){\n        nachricht.payload = \"Folgende Befehle können verwendet werden:\\n Bs -> Diese Liste aufrufen \\n Bt -> Aktuelle Temperatur\";\n    }\n    \n    else{\n        nachricht.payload = \"Unbekannte Anweisung, Anweisungsliste kann mit 'Bs' aufgerufen werden.\"\n    }\n    \n    return nachricht;\n}\n\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 780,
+        "y": 700,
+        "wires": [
+            [
+                "fc3dbdfa.5e41e"
+            ]
+        ]
+    },
+    {
+        "id": "a82b4a1b.8c36",
+        "type": "delay",
+        "z": "825dd022.49967",
+        "name": "Delay 100ms",
+        "pauseType": "delay",
+        "timeout": "100",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 570,
+        "y": 700,
+        "wires": [
+            [
+                "b7a014ce.f0ef9"
+            ]
+        ]
+    },
+    {
+        "id": "db9da62c.e59dd8",
+        "type": "debug",
+        "z": "825dd022.49967",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 570,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "458a6413.7502a4",
+        "type": "delay",
+        "z": "825dd022.49967",
+        "name": "Limit 1 per minute",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 770,
+        "y": 560,
+        "wires": [
+            [
+                "b6977877.47316"
+            ]
+        ]
+    },
+    {
+        "id": "dcb2d1ec.a94a18",
+        "type": "matrix-recvtext",
+        "z": "825dd022.49967",
+        "name": "bot_room in",
+        "room": "!Qbooooooooooooo:Chat",
+        "server": "ad05a9d3.0f4cd",
+        "filterself": true,
+        "x": 330,
+        "y": 700,
+        "wires": [
+            [
+                "a82b4a1b.8c36",
+                "db9da62c.e59dd8"
+            ]
+        ]
+    },
+    {
+        "id": "fc3dbdfa.5e41e",
+        "type": "matrix-sendtext",
+        "z": "825dd022.49967",
+        "name": "bot_room out",
+        "room": "!Qbooooooooooooo:Chat",
+        "server": "ad05a9d3.0f4cd",
+        "notice": false,
+        "x": 1180,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "3bfdb428.8d8e3c",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "MQTT_Server",
+        "broker": "192.168.123.123",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "ad05a9d3.0f4cd",
+        "type": "matrix-server",
+        "z": "",
+        "name": "bot_Chat",
+        "server": "http://192.168.123.124:8008",
+        "token": "ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
+        "userid": "@bot:Chat",
+        "room": ""
+    }
+]
