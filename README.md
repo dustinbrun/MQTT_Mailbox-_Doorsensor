@@ -4,6 +4,10 @@ A MQTT Door- or Mailboxsensor using an ESP8266 Wifi Module, which notifies you i
 
 ![Alt text](pictures/mailbox.jpg?raw=true "https://www.swinginter.net/wp-content/uploads/2018/03/otelo-mailbox.png")
 
+<img src="pictures/Doorsensor_1.jpg" width="40%">
+<img src="pictures/Doorsensor_2.jpg" width="45%">
+
+
 # How it Works
 If the mailbox opens the ESP wakes up from deep-sleep, connects to Wifi and the MQTT-server and sents out a MQTT message, which is then processed by Node-Red. Node-Red however "converts" it into a Matrix message, which is then posted to my phone via a Matrix-Chatbot.
 ## You Can find the Instructions how to create the Chatbot in the [node-red-Folder](node-red/README.md).
